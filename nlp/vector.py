@@ -41,8 +41,11 @@ class Model:
             raise TypeError("input(s) None")
         if not(isinstance(word1, str) and isinstance(word2, str)):
             raise TypeError("input(s) not str") 
-        vec1 = self.embeddings[word1]
-        vec2 = self.embeddings[word2]
+        try:
+            vec1 = self.embeddings[word1.strip()]
+            vec2 = self.embeddings[word2.strip()]
+        except KeyError:
+            return float("inf") # cannot find one of the words. Give largest distance.
         dist =  1 - self.__cosine_similarity(vec1, vec2)
         return dist
 
