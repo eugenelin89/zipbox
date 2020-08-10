@@ -5,7 +5,7 @@ from nlp.vector import Model
 
 
 app = Flask(__name__)
-api = Api(app, version='0.1', title='ZipBox API', description='REST API for ZipBox, an Open-Sourced NLP toolbox. [Source Code](https://github.com/eugenelin89/zipbox)')
+api = Api(app, version='0.1', title='ZipBox', description='API for ZipNLP, an Open-Sourced NLP toolbox. [Source Code](https://github.com/eugenelin89/zipbox)')
 name_space = api.namespace('nlp', description='NLP APIs')
 
 model = Model("./nlp/embeddings.bin")
