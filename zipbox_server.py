@@ -8,7 +8,7 @@ app = Flask(__name__)
 api = Api(app, version='0.1', title='ZipBox', description='API for ZipNLP, an Open-Sourced NLP toolbox. [Source Code](https://github.com/eugenelin89/zipbox)')
 name_space = api.namespace('nlp', description='NLP APIs')
 
-model = Model("./nlp/embeddings.bin")
+model = None #Model("./nlp/embeddings.bin")
 
 
 
@@ -19,6 +19,22 @@ def catch_all(path):
     abort(401)
 
 
+@name_space.route('/ping')
+class Pinger(Resource):
+    def get(self):
+        return "Pong!"
+
+@name_space.route('/load')
+class LazyLoader(Resource):
+    def get(self):
+        global model
+        if model is None:
+            model = Model("./nlp/embeddings.bin")
+        return "Model Loaded"
+        
+
+
+
 @name_space.route('/distance')
 class Distance(Resource):
     @api.doc(params={'origin': 'first word, eg. "dog"', 'destination': 'second word, eg. "cat"'})
@@ -27,7 +43,7 @@ class Distance(Resource):
         Get distance between two words.
         Minimum distance 0.
         Maximum distance 1.
-        Example: curl 'http://localhost:5000/api/distance?word1=dog&word2=cat'
+        Example: curl 'http://localhost:5555/nlp/distance?origin=dog&destination=cat'
         Input:
             origin: first word
             destination: second word
