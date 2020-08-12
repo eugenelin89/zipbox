@@ -38,16 +38,12 @@ jsonschema==3.2.0
 lazy-object-proxy==1.4.3
 MarkupSafe==1.1.1
 mccabe==0.6.1
-mkl-fft==1.1.0
-mkl-random==1.1.1
-mkl-service==2.3.0
 numpy==1.19.1
 parso==0.7.0
 pexpect==4.8.0
 pickleshare==0.7.5
 pip==20.1.1
 prompt-toolkit==3.0.5
-protobuf==3.12.3
 ptyprocess==0.6.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.7
@@ -63,7 +59,6 @@ requests==2.24.0
 rsa==4.0
 s3transfer==0.1.13
 scipy==1.5.0
-setuptools==49.2.0.post20200714
 six==1.15.0
 smart-open==2.1.0
 toml==0.10.1
@@ -75,3 +70,4 @@ Werkzeug==1.0.1
 wheel==0.34.2
 wrapt==1.11.2
 zipp==3.1.0
+uWSGI==2.0.17.1
