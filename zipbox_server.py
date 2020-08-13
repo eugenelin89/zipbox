@@ -1,14 +1,20 @@
+
 from flask import Flask, request, make_response, abort, logging
 from flask_restx import Api, Resource
 import json
-from nlp.vector import Model
+
+import logging
+from nlp.embedding import Embedding
 
 
 app = Flask(__name__)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
 api = Api(app, version='0.1', title='ZipBox', description='API for ZipNLP, an Open-Sourced NLP toolbox. [Source Code](https://github.com/eugenelin89/zipbox)')
 name_space = api.namespace('nlp', description='NLP APIs')
 
-model = None #Model("./nlp/embeddings.bin")
+embedding = None #Model("./nlp/embeddings.bin")
 
 
 
@@ -24,13 +30,18 @@ class Pinger(Resource):
     def get(self):
         return "Pong!"
 
-@name_space.route('/load')
-class LazyLoader(Resource):
+@name_space.route('/loadEmbedding')
+class EmbeddingLoader(Resource):
     def get(self):
-        global model
-        if model is None:
-            model = Model("./nlp/embeddings.bin")
-        return "Model Loaded"
+        global embedding
+        path = './nlp/embeddings.bin'
+        if embedding is None:
+            logger.info('Loading model from %s', path)
+            embedding = Embedding(path)
+            logger.info('Model loaded.')
+        else:
+            logger.info('Model already loaded.')
+        return "Embedding Loaded"
         
 
 
@@ -56,7 +67,7 @@ class Distance(Resource):
         word2 = request.args.get("destination")
         if word1 is None or word2 is None:
             api.abort(400, "Missing required parameter(s). Make sure to supply both origin and destination")
-        dist = model.get_distance(word1, word2)
+        dist = embedding.get_distance(word1, word2)
         res = {"distance": str(dist)}
         res = json.dumps(res, indent=4)
         # print(res)
@@ -106,7 +117,7 @@ class Destinations(Resource):
         if not isinstance(neighbor_words_list, list):
             api.abort(400, "Destinations must be a json array of words")
         
-        sorted_neighbors_dists = model.get_sorted_distances(center_word.strip(), neighbor_words_list)
+        sorted_neighbors_dists = embedding.get_sorted_distances(center_word.strip(), neighbor_words_list)
         sorted_neighbors = [word for (word, _) in  sorted_neighbors_dists]
         sorted_dists = [str(dist) for (_, dist) in sorted_neighbors_dists]
         res_json = {"origin":center_word, "destinations" : sorted_neighbors, "distances" : sorted_dists}
