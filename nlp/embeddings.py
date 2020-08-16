@@ -3,14 +3,14 @@
 import numpy as np
 from gensim.models import KeyedVectors
 
-class Embedding:
-    def __init__(self, embedding_path = './embeddings.bin' ):
+class Embeddings:
+    def __init__(self, embeddings_path = './embeddings.bin' ):
         """
         Constructor for Model object.
         Input: 
-            embedding_path: string representing filepath to the word embeddings
+            embeddings_path: string representing filepath to the word embeddings
         """
-        self.embeddings = KeyedVectors.load_word2vec_format(embedding_path, binary = True)
+        self.embeddings = KeyedVectors.load_word2vec_format(embeddings_path, binary = True)
 
     def __cosine_similarity(self, vec1, vec2):
         """
