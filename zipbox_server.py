@@ -32,16 +32,29 @@ class Pinger(Resource):
 
 @name_space.route('/loadEmbeddings')
 class EmbeddingsLoader(Resource):
+    @api.doc(params={'db_host': 'DB address', 'db_name': 'DB name', 'db_user': 'DB login user',
+     'db_pw':'DB login password', 'db_port' :'DB port (Default 25060)'})
     def get(self):
+        msg = 'Load Embeddings'
+        db_host = request.args.get('db_host').strip()
+        db_name = request.args.get('db_name').strip()
+        db_user = request.args.get('db_user').strip()
+        db_pw = request.args.get('db_pw').strip()
+        db_port = int(request.args.get('db_port').strip())
         global embeddings
-        path = './nlp/embeddings.bin'
         if embeddings is None:
-            logger.info('Loading model from %s', path)
-            embeddings = Embeddings(path)
-            logger.info('Model loaded.')
+            logger.info('Loading embeddings model')
+            embeddings = Embeddings(db_host, db_name, db_user, db_pw, db_port)
+            if embeddings is not None:
+                msg = 'Embeddings Loaded'
+                logger.info(msg)
+            else:
+                msg = 'Unable to load embedding. Please check connection info.'
+                logger.info(msg)
         else:
-            logger.info('Model already loaded.')
-        return "Embeddings Loaded"
+            msg = 'Embeddings already loaded.'
+            logger.info(msg)
+        return msg
         
 
 
