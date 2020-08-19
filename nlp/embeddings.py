@@ -44,6 +44,7 @@ class Embeddings:
             self.db_connection = psycopg2.connect(conn_str)
 
     def __get_embedding_vector(self, word):
+        # TODO: select multiple vectors in one sql execution
         vec = None
         # If we have loaded embeddings, use it
         if self.embeddings is not None: 
