@@ -71,6 +71,8 @@ class Distance(Resource):
         Minimum distance 0.
         Maximum distance 1.
         """
+        if embeddings is None:
+            api.abort(503, "Model not loaded")
         word1 = request.args.get("origin")
         word2 = request.args.get("destination")
         if word1 is None or word2 is None:
@@ -85,13 +87,15 @@ class Distance(Resource):
 
 @name_space.route('/destinations')
 class Destinations(Resource):
-    @api.doc(params={'origin': 'first word, eg. "dog"', 'destinations': 'list of words in json format, eg. ["car","boat","dog","man","chair"]'})
+    @api.doc(params={'origin': 'first word, eg. "dog"', 'destinations': 'list of words in valid json array, eg. ["car","boat","dog","man","chair"]'})
     def get(self):
         """
         Calculate the distance between origin word and a list of destination words.
         Minimum distance 0.
         Maximum distance 1.
         """
+        if embeddings is None:
+            api.abort(503, "Model not loaded")
         center_word = request.args.get("origin")
         neighbor_words = request.args.get("destinations")
         if center_word is None or neighbor_words is None:
@@ -105,7 +109,7 @@ class Destinations(Resource):
         if not isinstance(neighbor_words_list, list):
             api.abort(400, "Destinations must be a json array of words")
         
-        sorted_neighbors_dists = embeddings.get_sorted_distances(center_word.strip(), neighbor_words_list)
+        sorted_neighbors_dists = embeddings.get_sorted_distances(center_word.strip('"').strip("'").strip(), neighbor_words_list)
         sorted_neighbors = [word for (word, _) in  sorted_neighbors_dists]
         sorted_dists = [str(dist) for (_, dist) in sorted_neighbors_dists]
         res_json = {"origin":center_word, "destinations" : sorted_neighbors, "distances" : sorted_dists}
