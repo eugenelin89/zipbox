@@ -7,7 +7,7 @@ import numpy
 
 
 class Embeddings:
-    def __init__(self, db_host = None, db_name = None, db_user = None, db_pw = None, db_port = 25060, embeddings_path = None):
+    def __init__(self, db_host = None, db_name = None, db_user = None, db_pw = None, db_port = 25060):
         """
         Constructor for Model object.
         Input: 
@@ -15,50 +15,29 @@ class Embeddings:
         """
         print('Initializing Embedding Object')
         self.db_connection = None
-        self.embeddings = None
         # DB/embeddings connection/filepath details
         self.db_host = db_host
         self.db_name = db_name
         self.db_user = db_user
         self.db_pw = db_pw
         self.db_port = db_port
-        self.embeddings_path = embeddings_path
 
         if db_host is not None and db_name is not None and db_user is not None and db_pw is not None and db_port is not None:
             self.__connect_to_db()
-
-        elif embeddings_path is not None and self.db_connection is None: 
-            self.embeddings = KeyedVectors.load_word2vec_format(embeddings_path, binary = True)
-
         else:
             # We have a problem...
-            raise Exception("Please initialize Embeddings with fuil DB connection parameters or provide path to embeddings file.")
+            raise Exception("Please initialize Embeddings with fuil DB connection parameters.")
 
 
     def __del__(self):
-        self.db_connection.close()
+        if self.db_connection is not None:
+            self.db_connection.close()
 
 
     def __connect_to_db(self):
         if self.db_connection is None:
             conn_str = "host={} user={} password={} port={} dbname={}".format(self.db_host, self.db_user, self.db_pw, self.db_port, self.db_name)
             self.db_connection = psycopg2.connect(conn_str)
-
-
-    def __get_embedding_vector(self, word):
-        # TODO: select multiple vectors in one sql execution
-        vec = None
-        # If we have loaded embeddings, use it
-        if self.embeddings is not None: 
-            vec = self.embeddings[word.strip()]
-        else: # use db to get the embedding 
-            self.__connect_to_db()
-            cursor = self.db_connection.cursor()
-            cursor.execute('SELECT key, embedding FROM embeddings WHERE key=%s', (word.strip(),))
-            data = cursor.fetchone()
-            vec = numpy.array(data[1])
-            assert type(vec) is numpy.ndarray
-        return vec
 
 
     def __get_embedding_vectors_from_db(self, *words):
