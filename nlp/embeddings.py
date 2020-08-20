@@ -6,7 +6,6 @@ import psycopg2
 import numpy
 
 
-
 class Embeddings:
     def __init__(self, db_host = None, db_name = None, db_user = None, db_pw = None, db_port = 25060, embeddings_path = None):
         """
@@ -25,7 +24,6 @@ class Embeddings:
         self.db_port = db_port
         self.embeddings_path = embeddings_path
 
-
         if db_host is not None and db_name is not None and db_user is not None and db_pw is not None and db_port is not None:
             self.__connect_to_db()
 
@@ -36,13 +34,16 @@ class Embeddings:
             # We have a problem...
             raise Exception("Please initialize Embeddings with fuil DB connection parameters or provide path to embeddings file.")
 
+
     def __del__(self):
         self.db_connection.close()
+
 
     def __connect_to_db(self):
         if self.db_connection is None:
             conn_str = "host={} user={} password={} port={} dbname={}".format(self.db_host, self.db_user, self.db_pw, self.db_port, self.db_name)
             self.db_connection = psycopg2.connect(conn_str)
+
 
     def __get_embedding_vector(self, word):
         # TODO: select multiple vectors in one sql execution
@@ -58,6 +59,7 @@ class Embeddings:
             vec = numpy.array(data[1])
             assert type(vec) is numpy.ndarray
         return vec
+
 
     def __get_embedding_vectors_from_db(self, *words):
         query_string = 'SELECT key, embedding FROM embeddings WHERE'
@@ -77,7 +79,6 @@ class Embeddings:
         return result
         
             
-
     def __cosine_similarity(self, vec1, vec2):
         """
         Calculates cosine similarity between two vectors.
@@ -93,7 +94,6 @@ class Embeddings:
         norma = np.linalg.norm(vec1) 
         normb = np.linalg.norm(vec2) 
         return dot / (norma * normb)
-
 
 
     def get_distance(self, word1, word2):
@@ -121,6 +121,7 @@ class Embeddings:
         dist =  1 - self.__cosine_similarity(vec1, vec2)
         return dist
 
+
     def get_sorted_distances(self, word, word_list, ascend = True):
         """
         Given a center-word and a list of words, sort the words based on distance to the center words
@@ -135,7 +136,19 @@ class Embeddings:
             raise TypeError("input(s) None")
         if not(isinstance(word, str) and isinstance(word_list, list)):
             raise TypeError("input(s) type mismatch")
-        lst = [(target_word, self.get_distance(word, target_word)) for target_word in word_list]
+        try:
+            lst = []
+            vec_dic = self.__get_embedding_vectors_from_db(*(word_list+[word]))
+            word_vec = vec_dic[word]
+            for target_word in word_list:
+                target_vec = vec_dic.get(target_word, None)
+                dist = float('inf')
+                if target_vec is not None:
+                    dist = 1 - self.__cosine_similarity(word_vec, target_vec)
+                lst.append((target_word, dist))
+        except KeyError:
+            lst = [float('inf')] * len(word_list)
+            return list(zip(word_list, lst))
         return sorted(lst, key = lambda x: x[1], reverse = not ascend)
 
 
@@ -148,7 +161,6 @@ if __name__ == '__main__':
     db_user = sys.argv[3]
     db_pw = sys.argv[4]
     db_port = int(sys.argv[5])
-    # def __init__(self, db_host = None, db_name = None, db_user = None, db_pw = None, db_port = 25060, embeddings_path = None):
     embeddings = Embeddings(db_host, db_name, db_user, db_pw, db_port)
-    dic = embeddings._Embeddings__get_embedding_vectors_from_db('vancouver','burnaby','north_delta')
+    dic = embeddings._Embeddings__get_embedding_vectors_from_db(*['dog','cat','horse'])
     print(dic) 
