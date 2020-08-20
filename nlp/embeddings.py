@@ -59,7 +59,7 @@ class Embeddings:
             assert type(vec) is numpy.ndarray
         return vec
 
-    def _get_embedding_vectors_from_db(self, *words):
+    def __get_embedding_vectors_from_db(self, *words):
         query_string = 'SELECT key, embedding FROM embeddings WHERE'
         for i in range(len(words)):
             if i == 0:
@@ -73,7 +73,7 @@ class Embeddings:
         data = cursor.fetchall() #[(word1, vec1), (word2, vec2)...]
         result = {}
         for tup in data:
-            result[tup[0]] = tup[1]
+            result[tup[0]] = numpy.array(tup[1])
         return result
         
             
@@ -103,15 +103,19 @@ class Embeddings:
             word1: string repreentation of first word
             word2: string representation of second word
         Output:
-            distance between word1 and word 2. 0 is smallest distance (most similar).
+            distance between word1 and word2. 0 is smallest distance (most similar), and 1 is most dissimilar.
+            If one or more of the words does not exist in the embeddings, infinity (inf) is returned.
         """
         if word1 is None or word2 is None:
             raise TypeError("input(s) None")
         if not(isinstance(word1, str) and isinstance(word2, str)):
             raise TypeError("input(s) not str") 
         try:
-            vec1 = self.__get_embedding_vector(word1)  #self.embeddings[word1.strip()]
-            vec2 = self.__get_embedding_vector(word2)  #self.embeddings[word2.strip()]
+            word1 = word1.strip()
+            word2 = word2.strip()
+            vec_dic = self.__get_embedding_vectors_from_db(word1, word2)
+            vec1 = vec_dic[word1]
+            vec2 = vec_dic[word2]
         except KeyError:
             return float("inf") # cannot find one of the words. Give largest distance.
         dist =  1 - self.__cosine_similarity(vec1, vec2)
@@ -146,5 +150,5 @@ if __name__ == '__main__':
     db_port = int(sys.argv[5])
     # def __init__(self, db_host = None, db_name = None, db_user = None, db_pw = None, db_port = 25060, embeddings_path = None):
     embeddings = Embeddings(db_host, db_name, db_user, db_pw, db_port)
-    dic = embeddings._get_embedding_vectors_from_db('cat','dog','horse')
+    dic = embeddings._Embeddings__get_embedding_vectors_from_db('vancouver','burnaby','north_delta')
     print(dic) 
