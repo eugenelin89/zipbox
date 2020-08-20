@@ -35,6 +35,9 @@ class EmbeddingsLoader(Resource):
     @api.doc(params={'db_host': 'DB address', 'db_name': 'DB name', 'db_user': 'DB login user',
      'db_pw':'DB login password', 'db_port' :'DB port (Default 25060)'})
     def get(self):
+        """
+        Load embeddings database. 
+        """
         msg = 'Load Embeddings'
         db_host = request.args.get('db_host').strip()
         db_name = request.args.get('db_name').strip()
@@ -67,14 +70,6 @@ class Distance(Resource):
         Get distance between two words.
         Minimum distance 0.
         Maximum distance 1.
-        Example: curl 'http://localhost:5555/nlp/distance?origin=dog&destination=cat'
-        Input:
-            origin: first word
-            destination: second word
-        Output:
-            {
-                "distance": "0.23905432224273682"
-            }
         """
         word1 = request.args.get("origin")
         word2 = request.args.get("destination")
@@ -96,26 +91,6 @@ class Destinations(Resource):
         Calculate the distance between origin word and a list of destination words.
         Minimum distance 0.
         Maximum distance 1.
-        Example: curl --globoff 'http://localhost:5000/api/destinations?origin=dog&destinations=["bike","horse","cat","plane"]'
-        Input:
-            origin: word to compute distance to list of destination words
-            destinations: list of destination words to compute distance to the origin word, e.g. ["car","boat","dog","man","chair"]
-        Output: 
-            {
-                "origin":"dog",
-                "destinations": [
-                    "cat",
-                    "horse",
-                    "bike",
-                    "plane"
-                ],
-                "distances": [
-                    "0.23905432224273682",
-                    "0.5174192488193512",
-                    "0.6601129174232483",
-                    "0.8033067882061005"
-                ]
-            }
         """
         center_word = request.args.get("origin")
         neighbor_words = request.args.get("destinations")

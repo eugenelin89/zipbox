@@ -1,5 +1,5 @@
 
-
+import sys
 import numpy as np
 from gensim.models import KeyedVectors
 import psycopg2
@@ -14,6 +14,7 @@ class Embeddings:
         Input: 
             embeddings_path: string representing filepath to the word embeddings
         """
+        print('Initializing Embedding Object')
         self.db_connection = None
         self.embeddings = None
         # DB/embeddings connection/filepath details
@@ -57,6 +58,25 @@ class Embeddings:
             vec = numpy.array(data[1])
             assert type(vec) is numpy.ndarray
         return vec
+
+    def _get_embedding_vectors_from_db(self, *words):
+        query_string = 'SELECT key, embedding FROM embeddings WHERE'
+        for i in range(len(words)):
+            if i == 0:
+                query_string = query_string + ' key = %s'
+            else:
+                query_string = query_string + ' or key = %s'
+        params = tuple(map(str.strip, words))
+        self.__connect_to_db()
+        cursor = self.db_connection.cursor()
+        cursor.execute(query_string, params)
+        data = cursor.fetchall() #[(word1, vec1), (word2, vec2)...]
+        result = {}
+        for tup in data:
+            result[tup[0]] = tup[1]
+        return result
+        
+            
 
     def __cosine_similarity(self, vec1, vec2):
         """
@@ -117,4 +137,14 @@ class Embeddings:
 
     
 
- 
+if __name__ == '__main__':
+    
+    db_host = sys.argv[1]
+    db_name = sys.argv[2]
+    db_user = sys.argv[3]
+    db_pw = sys.argv[4]
+    db_port = int(sys.argv[5])
+    # def __init__(self, db_host = None, db_name = None, db_user = None, db_pw = None, db_port = 25060, embeddings_path = None):
+    embeddings = Embeddings(db_host, db_name, db_user, db_pw, db_port)
+    dic = embeddings._get_embedding_vectors_from_db('cat','dog','horse')
+    print(dic) 
