@@ -2,4 +2,6 @@
 
 # How is ZipBox different?
 
-# How do you launch ZipBox?
+# How do I launch ZipBox?
+
+# How do I use ZipBox?
