@@ -47,7 +47,13 @@ class EmbeddingsLoader(Resource):
         global embeddings
         if embeddings is None:
             logger.info('Loading embeddings model')
-            embeddings = Embeddings(db_host, db_name, db_user, db_pw, db_port)
+
+            try:
+                embeddings = Embeddings(db_host, db_name, db_user, db_pw, db_port)
+            except:
+                embeddings = None
+                api.abort(400, "Unable to load embedding. Please check connection info.")
+
             if embeddings is not None:
                 msg = 'Embeddings Loaded'
                 logger.info(msg)
