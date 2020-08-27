@@ -20,7 +20,7 @@ ZipBox also uses the pre-trained Word2Vec embeddings. Instead of loading the emb
 ### How do I start?
 
 #### Use ZipBox Online REST API
-ZipBox is available right from the start, without any programming or installation! We offer the toolkit online via [Zipbox Online REST API](https://box.zipnlp.com). You can even test-drive the toolkit and construct the complete request URL directly on the [documentation page](https://box.zipnlp.com)!
+ZipBox is available right from the start, without any programming or installation! We offer the toolkit online via [Zipbox Online REST API](https://box.zipnlp.com). You can test-drive the toolkit and construct the complete request URL directly on the [documentation page](https://box.zipnlp.com)!
 
 #### Clone ZipBox repo 
 #### Download ZipBox Docker Image
