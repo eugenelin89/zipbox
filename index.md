@@ -13,7 +13,7 @@ While ZipBox is still young and offers limited functionalities, it is fast-growi
 
 The design principles behind ZipBox is to keep the system lean and fast. Models in Natural Language Processing often take up a large amount of computing resources.  Google’s popular pre-trained Word2Vec embeddings can take up to 4GB of RAM while Facebook’s fastText embeddings takes 10GB. It would be a challenge to use those tools with affordability even though there are abundant open-source tools available, such as the aforementioned Word2Vec and fastText.
 
-ZipBox also uses the pre-trained Word2Vec embeddings. Instead of loading the embeddings into memory, it preloads embeddings onto an industry-leading DBMS, separating the concern of Natural Language Processing algorithms from the labors of carrying data in memory. This approach affords the toolkit to run on commodity machines while offering lightning speed. 
+ZipBox also uses the pre-trained Word2Vec embeddings. Instead of loading the embeddings into memory, it preloads embeddings onto an industrial-strength DBMS, separating the concern of Natural Language Processing algorithms from the labors of carrying data in memory. This approach affords the toolkit to run on commodity machines while offering lightning speed. 
 
 
 
