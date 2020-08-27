@@ -1,5 +1,5 @@
 ZipBox is an Open Sourced Natural Language Processing toolkit. It is the core NLP toolkit created and used by [ZipNLP](https://zipnlp.com) for building its proprietary Natural Language Platform. 
-For more information, please visit the official [project page](https://eugenelin89.github.io/zipbox/), or try Zipbox on the [Online Rest API](https://box.zipnlp.com)
+For more information, please visit the official [project page](https://eugenelin89.github.io/zipbox/), or try ZipBox on the [Online Rest API](https://box.zipnlp.com)
 
 # Quick Start
 We highly recommend the use of the ZipBox Docker container, which works off-the-shelf and you can find the image [here](https://hub.docker.com/r/eugenelin89/zipbox_image).
