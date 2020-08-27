@@ -4,7 +4,7 @@
 
 ### What is ZipBox
 
-ZipBox is an Open Sourced Natural Language Processing toolkit used by [ZipNLP](https://zipnlp.com) for building its Natural Language Platform.  
+ZipBox is an Open Sourced Natural Language Processing toolkit. It is the core NLP toolkit created and used by [ZipNLP](https://zipnlp.com) for building its Natural Language Platform. For details of its functionalities, check out the Online API documentation [here](https://box.zipnlp.com).
 
 ```markdown
 Syntax highlighted code block
