@@ -31,7 +31,7 @@ Syntax highlighted code block
 
 
 ### How do I start?
-#### Clone ZipBox repo
-#### Download Docker Image
+#### Use ZipBox Online REST API
+#### Clone ZipBox repo 
+#### Download ZipBox Docker Image
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
