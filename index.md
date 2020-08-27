@@ -22,6 +22,8 @@ ZipBox also uses the pre-trained Word2Vec embeddings. Instead of loading the emb
 #### Use ZipBox Online REST API
 ZipBox is available right from the start, without any programming or installation! We offer the toolkit online via [Zipbox Online REST API](https://box.zipnlp.com). You can test-drive the toolkit and construct the complete request URL directly on the [documentation page](https://box.zipnlp.com)!
 
-#### Clone ZipBox repo 
+#### Clone ZipBox Github Repo
+If you want to run ZipBox on your own machine, or simply want to explore deeper into the code, please feel free to clone the project from ZipBox’s [Github Repo](https://github.com/eugenelin89/zipbox).
+
 #### Download ZipBox Docker Image
 
