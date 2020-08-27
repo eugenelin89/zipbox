@@ -26,5 +26,5 @@ ZipBox is available right from the start, without any programming or installatio
 If you want to run ZipBox on your own machine, or simply want to explore deeper into the code, please feel free to clone the project from ZipBox’s [Github Repo](https://github.com/eugenelin89/zipbox).
 
 #### Docker Container
-You can also run ZipBox in a Docker container. The image is available on [DockerHub](https://hub.docker.com/r/eugenelin89/zipbox_image). 
+You can also run ZipBox in a Docker container. The image is available on [Docker Hub](https://hub.docker.com/r/eugenelin89/zipbox_image). 
 
