@@ -41,16 +41,11 @@ class Embeddings:
 
 
     def __get_embedding_vectors_from_db(self, *words):
-        query_string = 'SELECT key, embedding FROM embeddings WHERE'
-        for i in range(len(words)):
-            if i == 0:
-                query_string = query_string + ' key = %s'
-            else:
-                query_string = query_string + ' or key = %s'
-        params = tuple(map(str.strip, words))
+        query_string = 'SELECT key, embedding FROM embeddings WHERE key = ANY(%s);'
+        params = list(map(str.strip, words))
         self.__connect_to_db()
         cursor = self.db_connection.cursor()
-        cursor.execute(query_string, params)
+        cursor.execute(query_string, (params,))
         data = cursor.fetchall() #[(word1, vec1), (word2, vec2)...]
         result = {}
         for tup in data:
