@@ -15,7 +15,8 @@ The design principles behind ZipBox is to keep the system lean and fast. Models 
 
 ZipBox also uses the pre-trained Word2Vec embeddings. Instead of loading the embeddings into memory, it preloads embeddings onto an industrial-strength DBMS, separating the concern of Natural Language Processing algorithms from the labors of carrying data in memory. This approach affords the toolkit to run on commodity machines while offering lightning speed. 
 
-
+### How is ZipBox used?
+The current functions are simple. The functions compute cosine distance between words. When classifying intents of an utterance, oftentimes the identified entities in the process are slightly different from what is in the training set. This is normal. People express intents in many different ways and more often than not unanticipated. By being able to compare the “distance” between an unidentified entity with what the model anticipated, intent classification can have much higher success. This is one of the many ways the current version of ZipBox can be used, and is being heavily used by the development of [ZipNLP](https://zipnlp.com).
 
 ### How do I start?
 
