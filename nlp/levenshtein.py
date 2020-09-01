@@ -110,8 +110,19 @@ class Levenshtein:
     
         return edit_two_set
 
-    def get_corrections(self, word, n):
-        pass
+    def get_corrections(self, word, edit_two = False):
+        suggestions = {word}.union(self._edit_one_letter(word))#.union(self._edit_two_letters(word))
+        if edit_two:
+            suggestions = suggestions.union(self._edit_two_letters(word))
+        #print(suggestions)
+        query_string = 'SELECT key FROM embeddings WHERE key = ANY(%s);'
+        params = list(map(str.strip, suggestions))
+        self.__connect_to_db()
+        cursor = self.db_connection.cursor()
+        cursor.execute(query_string, (params,))
+        data = cursor.fetchall() #[(word1, vec1), (word2, vec2)...]       
+        return [tup[0] for tup in data]
+
 
 
 if __name__ == '__main__':
@@ -123,5 +134,9 @@ if __name__ == '__main__':
     db_port = int(sys.argv[5])
     lev = Levenshtein(db_host, db_name, db_user, db_pw, db_port)
 
-    delete_word_l = lev._delete_letter(word="cans")
-    print(delete_word_l)
+    #r = lev._delete_letter(word="cans")
+    #print(r)
+    r = lev.get_corrections("phootsynthesis")
+    print(r)
+    print(len(r))
+    
